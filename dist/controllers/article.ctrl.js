@@ -5,13 +5,13 @@ const fs = require('fs')
 const cloudinary = require('cloudinary')
 
 module.exports = {
-    
+
     addArticle: (req, res, next) => {
-        let { text, title, claps, description } = req.body
+        let {text, title, claps, description} = req.body
         //let obj = { text, title, claps, description, feature_img: _feature_img != null ? `/uploads/${_filename}` : '' }
         if (req.files.image) {
             cloudinary.uploader.upload(req.files.image.path, (result) => {
-                let obj = { text, title, claps, description, feature_img: result.url != null ? result.url : '' }
+                let obj = {text, title, claps, description, feature_img: result.url != null ? result.url : ''}
                 saveArticle(obj)
                 /*(new Student({...{url: result.url},...req.body})).save((err, newStudent) => {
                 const cloud_res = {
@@ -27,15 +27,16 @@ module.exports = {
                     res.send({...newS,...cloud_res})
                 next()
             })*/
-            },{
+            }, {
                 resource_type: 'image',
                 eager: [
                     {effect: 'sepia'}
                 ]
             })
-        }else {
-            saveArticle({ text, title, claps, description, feature_img: '' })
+        } else {
+            saveArticle({text, title, claps, description, feature_img: ''})
         }
+
         function saveArticle(obj) {
             new Article(obj).save((err, article) => {
                 if (err)
@@ -50,6 +51,7 @@ module.exports = {
                 next()
             })
         }
+
         /*new Article(obj).save((err, article) => {
             if (err)
                 res.send(err)
@@ -79,15 +81,15 @@ module.exports = {
     },
     getAll: (req, res, next) => {
         Article.find(req.params.id)
-        .populate('author')
-        .populate('comments.author').exec((err, article)=> {
+            .populate('author')
+            .populate('comments.author').exec((err, article) => {
             if (err)
                 res.send(err)
             else if (!article)
                 res.send(404)
             else
                 res.send(article)
-            next()            
+            next()
         })
     },
 
@@ -95,8 +97,8 @@ module.exports = {
      * article_id
      */
     clapArticle: (req, res, next) => {
-        Article.findById(req.body.article_id).then((article)=> {
-            return article.clap().then(()=>{
+        Article.findById(req.body.article_id).then((article) => {
+            return article.clap().then(() => {
                 return res.json({msg: "Done"})
             })
         }).catch(next)
@@ -106,7 +108,7 @@ module.exports = {
      * comment, author_id, article_id
      */
     commentArticle: (req, res, next) => {
-        Article.findById(req.body.article_id).then((article)=> {
+        Article.findById(req.body.article_id).then((article) => {
             return article.comment({
                 author: req.body.author_id,
                 text: req.body.comment
@@ -121,15 +123,15 @@ module.exports = {
      */
     getArticle: (req, res, next) => {
         Article.findById(req.params.id)
-        .populate('author')
-        .populate('comments.author').exec((err, article)=> {
+            .populate('author')
+            .populate('comments.author').exec((err, article) => {
             if (err)
                 res.send(err)
             else if (!article)
                 res.send(404)
             else
                 res.send(article)
-            next()            
+            next()
         })
     }
 }

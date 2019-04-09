@@ -1,6 +1,6 @@
 const path = require("path")
 const fs = require("fs")
-const { spawn } = require('child_process')
+const {spawn} = require('child_process')
 
 function main() {
     let cmds = process.argv.slice(2, process.argv.length)
@@ -36,9 +36,9 @@ function processPlatform() {
 }
 
 /**
- * 
+ *
  * @param {*} terminal
- * @param {*} args 
+ * @param {*} args
  */
 function Spawn(terminal, args) {
     const child = spawn(terminal, args);
@@ -48,8 +48,8 @@ function Spawn(terminal, args) {
 }
 
 /**
- * 
- * @param {*} cmds 
+ *
+ * @param {*} cmds
  */
 function cmdToArgs(cmds) {
     let cmdArgs = []
@@ -61,4 +61,5 @@ function cmdToArgs(cmds) {
     })
     return cmdArgs
 }
+
 main()
